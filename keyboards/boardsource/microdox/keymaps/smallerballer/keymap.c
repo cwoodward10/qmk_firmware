@@ -46,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ESC_MED LT(3, KC_ESC)
 #define BSPC_NUM LT(4, KC_BSPC)
 #define DEL_SYM LT(5, KC_DEL)
-#define SLSH_FUNC LT(6, KC_SLSH)
+#define QUOT_FUNC LT(6, KC_QUOT)
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -69,8 +69,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT_split_3x5_3(
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
     GUI_A,   ALT_S,   SFT_D,   CTL_F,   KC_G,         KC_H,   CTL_J,   SFT_K,    ALT_L,  GUI_SCLN,
-    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,         KC_N,    KC_M,    KC_COMM, KC_DOT,  SLSH_FUNC,
-                      ESC_MED, TAB_NAV, KC_ENT,     KC_SPC, BSPC_NUM,  DEL_SYM
+    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,         KC_N,    KC_M,    KC_COMM, KC_DOT,  QUOT_FUNC,
+                      ESC_MED, TAB_NAV,  KC_ENT,     KC_SPC, BSPC_NUM,  DEL_SYM
   ),
 
   [_MAC] = LAYOUT_split_3x5_3(
@@ -95,14 +95,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_NUM] = LAYOUT_split_3x5_3(
-    KC_SCLN,   KC_7,      KC_8,      KC_9,     KC_EQL,       KC_NO,     KC_NO,    TOG_MAC,   TOG_WIN,  QK_BOOT,
+    KC_QUOT,   KC_7,      KC_8,      KC_9,     KC_EQL,       KC_NO,     KC_NO,    TOG_MAC,   TOG_WIN,  QK_BOOT,
     KC_LBRC,   KC_4,      KC_5,      KC_6,     KC_RBRC,      KC_NO,     KC_RSFT,   KC_RCTL,   KC_RALT,  KC_RGUI,
     KC_GRV,    KC_1,      KC_2,      KC_3,     KC_BSLS,      KC_NO,     DT_DOWN,  DT_PRNT,   DT_UP,    KC_NO,
                            KC_DOT,    KC_0,     KC_MINS,      KC_TRNS,   KC_TRNS,  KC_TRNS
   ),
 
   [_SYM] = LAYOUT_split_3x5_3(
-    KC_COLN,   KC_AMPR,   KC_ASTR,   KC_LPRN,  KC_PLUS,      KC_NO,     KC_NO,    TOG_MAC,   TOG_WIN,  QK_BOOT,
+    KC_QUES,   KC_AMPR,   KC_ASTR,   KC_LPRN,  KC_PLUS,      KC_NO,     KC_NO,    TOG_MAC,   TOG_WIN,  QK_BOOT,
     KC_LCBR,   KC_DLR,    KC_PERC,   KC_CIRC,  KC_RCBR,      KC_NO,     KC_RSFT,   KC_RCTL,   KC_RALT,  KC_RGUI,
     KC_TILD,   KC_EXLM,   KC_AT,     KC_HASH,  KC_PIPE,      KC_NO,     DT_DOWN,  DT_PRNT,   DT_UP,    KC_NO,
                            KC_LPRN,   KC_RPRN,  KC_UNDS,      KC_TRNS,   KC_TRNS,  KC_TRNS
@@ -171,8 +171,23 @@ static void render_status(void) {
     print_mod_status();
 }
 
+static void render_logo(void) {
+    static const char PROGMEM qmk_logo[] = {
+        0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94,
+        0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4,
+        0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0x00
+    };
+
+    oled_write_P(qmk_logo, false);
+}
+
 bool oled_task_user(void) {
-    render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
+    if (is_keyboard_master()) {
+        render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
+    } else {
+        render_logo();  // Renders a static logo
+        oled_scroll_left();  // Turns on scrolling
+    }
     return false;
 }
 #endif
