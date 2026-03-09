@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "keycodes.h"
 #include "oled_driver.h"
 #include "progmem.h"
+#include "split_util.h"
 #include QMK_KEYBOARD_H
 
 // Left-hand home row mods
@@ -45,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DEL_NAV LT(2, KC_DEL)
 #define SLSH_MED LT(3, KC_QUOT)
 #define BSPC_SYM LT(4, KC_BSPC)
-#define TAB_NUM LT(5, KC_TAB)
+#define ENT_NUM LT(5, KC_ESC)
 #define ESC_FUNC LT(6, KC_ESC)
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -70,7 +71,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
     KC_A,   GUI_S,   CTL_D,   SFT_F,   ALT_G,         ALT_H,   SFT_J,   CTL_K,    GUI_L,  KC_SCLN,
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,         KC_N,    KC_M,    KC_COMM, KC_DOT,  SLSH_MED,
-                      ESC_FUNC, TAB_NUM,  KC_SPC,     KC_SPC, BSPC_SYM,  DEL_NAV
+                      ESC_FUNC, ENT_NUM,  KC_SPC,     KC_SPC, BSPC_SYM,  DEL_NAV
   ),
 
   // 1
@@ -86,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,    KC_FIND,   KC_UP,    KC_CUT,   KC_COPY,      QK_RBT,     DB_TOGG,   TOG_MAC,   TOG_WIN,  QK_BOOT,
     KC_NO,    KC_LEFT,   KC_DOWN,  KC_RGHT,  KC_PSTE,      KC_RALT,   KC_RSFT,   KC_RCTL,   KC_RGUI,  CW_TOGG,
     KC_NO,     KC_END,   KC_PGDN,  KC_PGUP,  KC_HOME,      KC_NO,     DT_DOWN,   DT_PRNT,   DT_UP,    KC_NO,
-                            KC_ESC,   KC_TAB,   KC_ENT,       KC_SPC,    KC_BSPC,   KC_DEL
+                            KC_ESC,   KC_TAB,   KC_TAB,       KC_SPC,    KC_BSPC,   KC_DEL
   ),
 
   //3 - LEFT
@@ -94,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     RM_VALU,   RM_SATU,   RM_HUEU,  RM_TOGG,  RM_NEXT,      QK_RBT,     DB_TOGG,   TOG_MAC,   TOG_WIN,  QK_BOOT,
     KC_VOLD,   KC_VOLU,   KC_MPRV,  KC_MPLY,  KC_MNXT,      KC_RALT,   KC_RSFT,   KC_RCTL,   KC_RGUI,  CW_TOGG,
     KC_NO,     KC_NO,     KC_MUTE,  KC_NO,    KC_NO,        KC_NO,     DT_DOWN,   DT_PRNT,   DT_UP,    KC_NO,
-                            KC_ESC,   KC_TAB,   KC_ENT,       KC_SPC,    KC_BSPC,   KC_DEL
+                            KC_ESC,   KC_TAB,   KC_TAB,       KC_SPC,    KC_BSPC,   KC_DEL
   ),
 
   //4 - LEFT
@@ -102,7 +103,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_PERC,   KC_HASH,   KC_LBRC,  KC_RBRC,  KC_AMPR,      QK_RBT,     DB_TOGG,   TOG_MAC,   TOG_WIN,  QK_BOOT,
     KC_EQL,    KC_RABK,   KC_LPRN,  KC_RPRN,  KC_CIRC,      KC_RALT,   KC_RSFT,   KC_RCTL,   KC_RGUI,  CW_TOGG,
     KC_AT,     KC_EXLM,   KC_LCBR,  KC_RCBR,  KC_DLR,       KC_NO,     DT_DOWN,   DT_PRNT,   DT_UP,    KC_NO,
-                            KC_NUBS,  KC_GRV,    KC_ENT,      KC_SPC,   KC_BSPC,   KC_DEL
+                            KC_NUBS,  KC_GRV,    KC_TAB,      KC_SPC,   KC_BSPC,   KC_DEL
   ),
 
   //5 - RIGHT
@@ -110,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     QK_BOOT,  TOG_WIN,    TOG_MAC,   DB_TOGG,    QK_RBT,    KC_MINS,   KC_7,  KC_8,  KC_9,  KC_NO,
     KC_CAPS,  KC_LGUI,    KC_LCTL,   KC_LSFT,  KC_LALT,     KC_EQL,    KC_4,  KC_5,  KC_6,  KC_QUOT,
     KC_NO,    DT_UP,      DT_PRNT,   DT_DOWN,    KC_NO,     KC_ASTR,   KC_1,  KC_2,  KC_3,  KC_NO,
-                           KC_ESC,    KC_TAB,    KC_SPC,     KC_ENT,    KC_0,  KC_DEL
+                           KC_ESC,    KC_TAB,    KC_SPC,     KC_TAB,    KC_0,  KC_DEL
   ),
 
 
@@ -119,16 +120,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     QK_BOOT,  TOG_WIN,    TOG_MAC,   DB_TOGG,    QK_RBT,    KC_F12,   KC_F7,  KC_F8,  KC_F9,  KC_NO,
     CW_TOGG,  KC_LGUI,     KC_LCTL,   KC_LSFT,  KC_LALT,     KC_F11,   KC_F4,  KC_F5,  KC_F6,  KC_NO,
     KC_NO,    DT_UP,      DT_PRNT,   DT_DOWN,    KC_NO,     KC_F10,   KC_F1,  KC_F2,  KC_F3,  KC_NO,
-                           KC_ESC,    KC_TAB,    KC_SPC,     KC_ENT,    KC_0,  KC_DEL
+                           KC_ESC,    KC_TAB,    KC_SPC,     KC_TAB,    KC_0,  KC_DEL
   ),
 };
 
 
 #ifdef OLED_ENABLE
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    return rotation;
-}
-
 static void print_mod_status(void) {
     uint8_t mod_state = get_mods();
 
@@ -172,7 +169,7 @@ static void render_status(void) {
     print_mod_status();
 
     led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.caps_lock ? PSTR("Caps-lock: on") : PSTR("Caps-lock: off"), false);
+    oled_write_P(led_state.caps_lock ? PSTR("Caps-lock: on ") : PSTR("Caps-lock: off"), false);
 
 }
 
