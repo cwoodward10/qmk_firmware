@@ -108,7 +108,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //5 - RIGHT
   [_NUM] = LAYOUT_split_3x5_3(
     QK_BOOT,  TOG_WIN,    TOG_MAC,   DB_TOGG,    QK_RBT,    KC_MINS,   KC_7,  KC_8,  KC_9,  KC_NO,
-    KC_CAPS,  KC_GUI,     KC_LCTL,   KC_LSFT,  KC_LALT,     KC_ELQ,    KC_4,  KC_5,  KC_6,  KC_QUOT,
+    KC_CAPS,  KC_LGUI,    KC_LCTL,   KC_LSFT,  KC_LALT,     KC_EQL,    KC_4,  KC_5,  KC_6,  KC_QUOT,
     KC_NO,    DT_UP,      DT_PRNT,   DT_DOWN,    KC_NO,     KC_ASTR,   KC_1,  KC_2,  KC_3,  KC_NO,
                            KC_ESC,    KC_TAB,    KC_SPC,     KC_ENT,    KC_0,  KC_DEL
   ),
@@ -117,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //6 - RIGHT
   [_FUNC] = LAYOUT_split_3x5_3(
     QK_BOOT,  TOG_WIN,    TOG_MAC,   DB_TOGG,    QK_RBT,    KC_F12,   KC_F7,  KC_F8,  KC_F9,  KC_NO,
-    CW_TOGG,  KC_GUI,     KC_LCTL,   KC_LSFT,  KC_LALT,     KC_F11,   KC_F4,  KC_F5,  KC_F6,  KC_NO,
+    CW_TOGG,  KC_LGUI,     KC_LCTL,   KC_LSFT,  KC_LALT,     KC_F11,   KC_F4,  KC_F5,  KC_F6,  KC_NO,
     KC_NO,    DT_UP,      DT_PRNT,   DT_DOWN,    KC_NO,     KC_F10,   KC_F1,  KC_F2,  KC_F3,  KC_NO,
                            KC_ESC,    KC_TAB,    KC_SPC,     KC_ENT,    KC_0,  KC_DEL
   ),
@@ -134,10 +134,10 @@ static void print_mod_status(void) {
 
     oled_write_P(PSTR("Mods: "), false);
 
-    oled_write_P(mod_state & MOD_MASK_CTRL ? PSTR("Ctrl ") : PSTR(""), false);
-    oled_write_P(mod_state & MOD_MASK_SHIFT ? PSTR("Sft ") : PSTR(""), false);
-    oled_write_P(mod_state & MOD_MASK_ALT ? PSTR("Alt ") : PSTR(""), false);
-    oled_write_P(mod_state & MOD_MASK_GUI ? PSTR("GUI ") : PSTR(""), false);
+    oled_write_P(mod_state & MOD_MASK_CTRL ? PSTR("C ") : PSTR("_ "), false);
+    oled_write_P(mod_state & MOD_MASK_SHIFT ? PSTR("S ") : PSTR("_ "), false);
+    oled_write_P(mod_state & MOD_MASK_ALT ? PSTR("A ") : PSTR("_ "), false);
+    oled_write_P(mod_state & MOD_MASK_GUI ? PSTR("G\n") : PSTR("_\n"), false);
 }
 
 static void render_status(void) {
@@ -169,12 +169,9 @@ static void render_status(void) {
             oled_write_ln_P(PSTR("Undefined Layer"), false);
     }
 
-    oled_write_P(PSTR("---"), false);
     print_mod_status();
 
-    oled_write_P(PSTR("---"), false);
     led_t led_state = host_keyboard_led_state();
-    oled_write_P(PSTR("Other state: "), false);
     oled_write_P(led_state.caps_lock ? PSTR("Caps-lock: on") : PSTR("Caps-lock: off"), false);
 
 }
@@ -190,7 +187,7 @@ static void render_logo(void) {
 }
 
 bool oled_task_user(void) {
-    if (is_keyboard_master()) {
+    if (is_keyboard_left()) {
         render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
     } else {
         render_logo();  // Renders a static logo
