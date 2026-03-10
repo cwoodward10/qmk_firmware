@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TOG_WIN DF(0)
 #define TOG_MAC DF(1)
 #define DEL_NAV LT(2, KC_DEL)
-#define SLSH_MED LT(3, KC_QUOT)
+#define SLSH_MED LT(3, KC_SLSH)
 #define BSPC_SYM LT(4, KC_BSPC)
 #define ENT_NUM LT(5, KC_ENT)
 #define ESC_FUNC LT(6, KC_ESC)
