@@ -46,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DEL_NAV LT(2, KC_DEL)
 #define SLSH_MED LT(3, KC_QUOT)
 #define BSPC_SYM LT(4, KC_BSPC)
-#define ENT_NUM LT(5, KC_ESC)
+#define ENT_NUM LT(5, KC_ENT)
 #define ESC_FUNC LT(6, KC_ESC)
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
